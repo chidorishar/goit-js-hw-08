@@ -5,18 +5,13 @@ const FORM_DATA_KEY = 'feedback-form-state';
 const formEl = document.querySelector('.feedback-form');
 let formData = {};
 
-formEl.addEventListener('input', throttle(onFormInput, 500));
-formEl.addEventListener('submit', onFormSubmit);
-
+//main functions
 (() => {
-  formData = JSON.parse(localStorage.getItem(FORM_DATA_KEY));
-  if (formData) {
-    Object.keys(formData).forEach(key =>
-      formData[key] ? (formEl.elements[key].value = formData[key]) : null
-    );
-  } else {
-    formData = {};
-  }
+  formEl.addEventListener('input', throttle(onFormInput, 500));
+  formEl.addEventListener('submit', onFormSubmit);
+
+  readFormDataFromStorage();
+  fillFormWithFormData();
 })();
 
 function onFormInput(event) {
@@ -26,7 +21,23 @@ function onFormInput(event) {
 
 function onFormSubmit(event) {
   event.preventDefault();
-  [...formEl.elements].forEach(el => (el.value = ''));
-  localStorage.removeItem(FORM_DATA_KEY);
   console.log(formData);
+  clearFormAndData();
+}
+
+function clearFormAndData() {
+  [...formEl.elements].forEach(el => (el.value = ''));
+  Object.keys(formData).forEach(key => (formData[key] = ''));
+  localStorage.removeItem(FORM_DATA_KEY);
+}
+
+function readFormDataFromStorage() {
+  formData = JSON.parse(localStorage.getItem(FORM_DATA_KEY));
+  formData = formData ? formData : {};
+}
+
+function fillFormWithFormData() {
+  Object.keys(formData).forEach(key =>
+    formData[key] ? (formEl.elements[key].value = formData[key]) : null
+  );
 }

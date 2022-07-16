@@ -10,6 +10,7 @@ let formData = {};
   formEl.addEventListener('input', throttle(onFormInput, 500));
   formEl.addEventListener('submit', onFormSubmit);
 
+  makeFormFieldsRequired();
   readFormDataFromStorage();
   fillFormWithFormData();
 })();
@@ -40,4 +41,10 @@ function fillFormWithFormData() {
   Object.keys(formData).forEach(key =>
     formData[key] ? (formEl.elements[key].value = formData[key]) : null
   );
+}
+
+function makeFormFieldsRequired() {
+  [...formEl.elements].forEach(value => {
+    value.setAttribute('required', '');
+  });
 }

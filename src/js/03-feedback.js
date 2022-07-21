@@ -27,7 +27,7 @@ function onFormSubmit(event) {
 }
 
 function clearFormAndData() {
-  [...formEl.elements].forEach(el => (el.value = ''));
+  formEl.reset();
   Object.keys(formData).forEach(key => (formData[key] = ''));
   localStorage.removeItem(FORM_DATA_KEY);
 }
